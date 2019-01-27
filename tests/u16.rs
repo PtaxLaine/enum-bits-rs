@@ -7,6 +7,7 @@ enum TestEnum {
     Foo_451 = 451,
     Bar_1235 = 1235,
     Baz_1224 = 1224,
+    Baz_1225,
     Biz_44 = 88 / 2,
     Zero = 0,
 }
@@ -17,6 +18,7 @@ fn read_u16() {
     assert_eq!(Some(TestEnum::Foo_451), TestEnum::read_u16(451));
     assert_eq!(Some(TestEnum::Bar_1235), TestEnum::read_u16(1235));
     assert_eq!(Some(TestEnum::Baz_1224), TestEnum::read_u16(1224));
+    assert_eq!(Some(TestEnum::Baz_1225), TestEnum::read_u16(1225));
     assert_eq!(Some(TestEnum::Biz_44), TestEnum::read_u16(44));
     assert_eq!(None, TestEnum::read_u16(45621));
 }
@@ -27,6 +29,7 @@ fn write_u16() {
     assert_eq!(Some(451), (TestEnum::Foo_451).write_u16());
     assert_eq!(Some(1235), (TestEnum::Bar_1235).write_u16());
     assert_eq!(Some(1224), (TestEnum::Baz_1224).write_u16());
+    assert_eq!(Some(1225), (TestEnum::Baz_1225).write_u16());
     assert_eq!(Some(44), (TestEnum::Biz_44).write_u16());
 }
 

@@ -6,7 +6,9 @@ use enum_primitive::EnumPrimitive;
 enum TestEnum {
     Foo_77 = 77,
     Bar_3689348814741910323 = 3689348814741910323,
+    Bar_3689348814741910324,
     Baz_m3689348814741910323 = -3689348814741910323,
+    Baz_m3689348814741910322,
     Biz_44 = 88 / 2,
     Zero = 0,
 }
@@ -20,8 +22,16 @@ fn read_i64() {
         TestEnum::read_i64(3689348814741910323)
     );
     assert_eq!(
+        Some(TestEnum::Bar_3689348814741910324),
+        TestEnum::read_i64(3689348814741910324)
+    );
+    assert_eq!(
         Some(TestEnum::Baz_m3689348814741910323),
         TestEnum::read_i64(-3689348814741910323)
+    );
+    assert_eq!(
+        Some(TestEnum::Baz_m3689348814741910322),
+        TestEnum::read_i64(-3689348814741910322)
     );
     assert_eq!(Some(TestEnum::Biz_44), TestEnum::read_i64(44));
     assert_eq!(None, TestEnum::read_i64(33));
@@ -36,8 +46,16 @@ fn write_i64() {
         (TestEnum::Bar_3689348814741910323).write_i64()
     );
     assert_eq!(
+        Some(3689348814741910324),
+        (TestEnum::Bar_3689348814741910324).write_i64()
+    );
+    assert_eq!(
         Some(-3689348814741910323),
         (TestEnum::Baz_m3689348814741910323).write_i64()
+    );
+    assert_eq!(
+        Some(-3689348814741910322),
+        (TestEnum::Baz_m3689348814741910322).write_i64()
     );
     assert_eq!(Some(44), (TestEnum::Biz_44).write_i64());
 }

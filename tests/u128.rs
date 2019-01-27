@@ -9,6 +9,7 @@ enum TestEnum {
     Foo_451 = 451,
     Bar_1235 = 1235,
     Baz_1224 = 1224,
+    Baz_1225,
     Baz_119644343981971758317424540861054977901 = 119644343981971758317424540861054977901,
     Biz_44 = 88 / 2,
     Zero = 0,
@@ -20,6 +21,7 @@ fn read_u128() {
     assert_eq!(Some(TestEnum::Foo_451), TestEnum::read_u128(451));
     assert_eq!(Some(TestEnum::Bar_1235), TestEnum::read_u128(1235));
     assert_eq!(Some(TestEnum::Baz_1224), TestEnum::read_u128(1224));
+    assert_eq!(Some(TestEnum::Baz_1225), TestEnum::read_u128(1225));
     assert_eq!(
         Some(TestEnum::Baz_119644343981971758317424540861054977901),
         TestEnum::read_u128(119644343981971758317424540861054977901)
@@ -34,6 +36,7 @@ fn write_u128() {
     assert_eq!(Some(451), (TestEnum::Foo_451).write_u128());
     assert_eq!(Some(1235), (TestEnum::Bar_1235).write_u128());
     assert_eq!(Some(1224), (TestEnum::Baz_1224).write_u128());
+    assert_eq!(Some(1225), (TestEnum::Baz_1225).write_u128());
     assert_eq!(
         Some(119644343981971758317424540861054977901),
         (TestEnum::Baz_119644343981971758317424540861054977901).write_u128()

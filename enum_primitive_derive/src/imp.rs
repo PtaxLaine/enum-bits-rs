@@ -1,6 +1,6 @@
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
-use syn::{Data, DeriveInput, Expr, Type};
+use syn::{Data, DeriveInput, Type};
 
 pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
     let name = &ast.ident;
@@ -28,10 +28,10 @@ pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
     gen
 }
 
-fn gen_map_reader(name: &Ident, variants: &[(&Ident, Expr)], type_ident: &Ident) -> TokenStream {
+fn gen_map_reader(name: &Ident, variants: &[&Ident], type_ident: &Ident) -> TokenStream {
     let premap: Vec<TokenStream> = variants
         .iter()
-        .map(|(ident, _)| quote! {#ident as #type_ident, #ident})
+        .map(|ident| quote! {#ident as #type_ident, #ident})
         .collect();
 
     quote! {
@@ -72,16 +72,11 @@ fn find_repr_ident(ast: &DeriveInput) -> Option<Ident> {
     None
 }
 
-fn find_variants<'a>(ast: &'a DeriveInput) -> Vec<(&'a Ident, Expr)> {
+fn find_variants<'a>(ast: &'a DeriveInput) -> Vec<&'a Ident> {
     if let Data::Enum(ref data) = ast.data {
         let mut variants = Vec::new();
         for x in data.variants.iter() {
-            let ident = &x.ident;
-            let discriminant = &x
-                .discriminant
-                .as_ref()
-                .expect("EnumPrimitive need explicit enum value");
-            variants.push((ident, discriminant.1.clone()));
+            variants.push(&x.ident);
         }
         variants
     } else {
