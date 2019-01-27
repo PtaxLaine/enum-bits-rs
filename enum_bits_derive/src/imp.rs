@@ -2,9 +2,9 @@ use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
 use syn::{Data, DeriveInput, Type};
 
-pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
+pub fn impl_enum_bits_macro(ast: &DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let variants = find_variants(&ast).expect("EnumPrimitive applicable to enum only");
+    let variants = find_variants(&ast).expect("EnumBits applicable to enum only");
     let type_ident = find_repr_ident(&ast).expect("Explicit type definition needed. Use #[repr(i32)]");
 
     let r_map = gen_map_reader(&name, &variants, &type_ident);
@@ -13,7 +13,7 @@ pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
     let w_ident = Ident::new(&format!("write_{}", &type_ident), Span::call_site());
 
     let gen = quote! {
-        impl enum_primitive::EnumPrimitive for #name {
+        impl enum_bits::EnumBits for #name {
             fn #r_ident(i: #type_ident) -> Option<#name>{
                 #r_map
                 MAP.get(&i).map(|x|unsafe{std::mem::transmute_copy(x)})
@@ -35,7 +35,7 @@ fn gen_map_reader(name: &Ident, variants: &[&Ident], type_ident: &Ident) -> Toke
         .collect();
 
     quote! {
-        use enum_primitive::lazy_static;
+        use enum_bits::lazy_static;
         use std::collections::HashMap;
         lazy_static! {
             static ref MAP: HashMap<#type_ident, #name> = {

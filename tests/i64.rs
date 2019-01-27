@@ -1,7 +1,7 @@
-use enum_primitive::EnumPrimitive;
+use enum_bits::EnumBits;
 
 #[repr(i64)]
-#[derive(Debug, EnumPrimitive, PartialEq)]
+#[derive(Debug, EnumBits, PartialEq)]
 #[allow(non_camel_case_types)]
 enum TestEnum {
     Foo_77 = 77,

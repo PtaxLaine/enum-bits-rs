@@ -1,5 +1,5 @@
 [package]
-name = "enum_primitive_derive"
+name = "enum_bits_derive"
 version = "0.1.0"
 authors = ["Andrei V <andrei@ptaxa.net>"]
 edition = "2018"

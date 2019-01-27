@@ -1,9 +1,9 @@
 #![cfg(nightly)]
 #![feature(repr128)]
-use enum_primitive::EnumPrimitive;
+use enum_bits::EnumBits;
 
 #[repr(i128)]
-#[derive(Debug, EnumPrimitive, PartialEq)]
+#[derive(Debug, EnumBits, PartialEq)]
 #[allow(non_camel_case_types)]
 enum TestEnum {
     Foo_77 = 77,

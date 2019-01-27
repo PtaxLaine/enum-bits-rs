@@ -1,7 +1,7 @@
-pub use enum_primitive_derive::EnumPrimitive;
+pub use enum_bits_derive::EnumBits;
 pub use lazy_static::lazy_static;
 
-pub trait EnumPrimitive: Sized {
+pub trait EnumBits: Sized {
     fn read_u8(_i: u8) -> Option<Self> {
         None
     }
