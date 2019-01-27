@@ -4,22 +4,22 @@ use syn::{Data, DeriveInput, Type};
 
 pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let suffix = find_repr_ident(&ast).expect("please use #[repr(i32)]");
-    let variants = find_variants(&ast);
+    let variants = find_variants(&ast).expect("EnumPrimitive applicable to enum only");
+    let type_ident = find_repr_ident(&ast).expect("Explicit type definition needed. Use #[repr(i32)]");
 
-    let r_map = gen_map_reader(&name, &variants, &suffix);
+    let r_map = gen_map_reader(&name, &variants, &type_ident);
 
-    let r_ident = Ident::new(&format!("read_{}", &suffix), Span::call_site());
-    let w_ident = Ident::new(&format!("write_{}", &suffix), Span::call_site());
+    let r_ident = Ident::new(&format!("read_{}", &type_ident), Span::call_site());
+    let w_ident = Ident::new(&format!("write_{}", &type_ident), Span::call_site());
 
     let gen = quote! {
         impl enum_primitive::EnumPrimitive for #name {
-            fn #r_ident(i: #suffix) -> Option<#name>{
+            fn #r_ident(i: #type_ident) -> Option<#name>{
                 #r_map
                 MAP.get(&i).map(|x|unsafe{std::mem::transmute_copy(x)})
             }
 
-            fn #w_ident(&self) -> Option<#suffix>{
+            fn #w_ident(&self) -> Option<#type_ident>{
                 Some(unsafe{std::mem::transmute_copy(self)})
             }
         }
@@ -72,14 +72,14 @@ fn find_repr_ident(ast: &DeriveInput) -> Option<Ident> {
     None
 }
 
-fn find_variants<'a>(ast: &'a DeriveInput) -> Vec<&'a Ident> {
+fn find_variants<'a>(ast: &'a DeriveInput) -> Option<Vec<&'a Ident>> {
     if let Data::Enum(ref data) = ast.data {
         let mut variants = Vec::new();
         for x in data.variants.iter() {
             variants.push(&x.ident);
         }
-        variants
+        Some(variants)
     } else {
-        panic!("EnumPrimitive applicable to enum only")
+        None
     }
 }
