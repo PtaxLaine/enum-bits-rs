@@ -1,4 +1,4 @@
-#![cfg(nightly)]
+#![cfg(feature = "repr128")]
 #![feature(repr128)]
 use enum_bits::EnumBits;
 

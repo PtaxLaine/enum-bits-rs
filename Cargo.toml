@@ -7,3 +7,6 @@ edition = "2018"
 [dependencies]
 enum_bits_derive = {path="./enum_bits_derive"}
 lazy_static = "1.2"
+
+[features]
+repr128 = []
