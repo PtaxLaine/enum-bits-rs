@@ -1,0 +1,9 @@
+[package]
+name = "enum_primitive"
+version = "0.1.0"
+authors = ["Andrei V <andrei@ptaxa.net>"]
+edition = "2018"
+
+[dependencies]
+enum_primitive_derive = {path="./enum_primitive_derive"}
+lazy_static = "1.2"
