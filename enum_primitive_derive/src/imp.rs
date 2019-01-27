@@ -4,7 +4,7 @@ use syn::{Data, DeriveInput, Expr, Type};
 
 pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let suffix = find_repr_ident(&ast).unwrap_or_else(|| Ident::new("i32", Span::call_site()));
+    let suffix = find_repr_ident(&ast).expect("please use #[repr(i32)]");
     let variants = find_variants(&ast);
 
     let r_map = gen_map_reader(&name, &variants, &suffix);
@@ -13,14 +13,14 @@ pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
     let w_ident = Ident::new(&format!("write_{}", &suffix), Span::call_site());
 
     let gen = quote! {
-        impl enum_primitive::EnumPrimitive for #name where #name: Clone {
+        impl enum_primitive::EnumPrimitive for #name {
             fn #r_ident(i: #suffix) -> Option<#name>{
                 #r_map
-                MAP.get(&i).cloned()
+                MAP.get(&i).map(|x|unsafe{std::mem::transmute_copy(x)})
             }
 
             fn #w_ident(&self) -> Option<#suffix>{
-                Some(self.clone() as #suffix)
+                Some(unsafe{std::mem::transmute_copy(self)})
             }
         }
     };
@@ -31,7 +31,7 @@ pub fn impl_enum_primitive_macro(ast: &DeriveInput) -> TokenStream {
 fn gen_map_reader(name: &Ident, variants: &[(&Ident, Expr)], type_ident: &Ident) -> TokenStream {
     let premap: Vec<TokenStream> = variants
         .iter()
-        .map(|(ident, _)| quote!{#ident as #type_ident, #ident})
+        .map(|(ident, _)| quote! {#ident as #type_ident, #ident})
         .collect();
 
     quote! {
