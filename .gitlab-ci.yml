@@ -8,11 +8,14 @@ before_script:
 
 run_tests_stable:
   script:
-    - rustup install stable
+    - rustup component add rustfmt --toolchain stable
+    - cargo +stable fmt -- --check
     - cargo +stable test
 
 run_tests_nightly:
   allow_failure: true
   script:
     - rustup install nightly
+    - rustup component add rustfmt --toolchain nightly
+    - cargo +nightly fmt -- --check
     - cargo +nightly test --features repr128
