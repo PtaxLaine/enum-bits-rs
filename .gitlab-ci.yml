@@ -5,25 +5,14 @@ before_script:
   - apt-get install -y -qq curl build-essential
   - curl https://sh.rustup.rs -sSf | sh -s -- -y
   - source $HOME/.cargo/env
-  - rustup install stable
-  - rustup install nightly
-
-stages:
-  - build
-  - test
-
-build_stable:
-  stage: build
-  script: cargo +stable build
-
-build_nightly:
-  stage: build
-  script: cargo +nightly build
 
 run_tests_stable:
-  stage: test
-  script: cargo +stable test
+  script:
+    - rustup install stable
+    - cargo +stable test
 
 run_tests_nightly:
-  stage: test
-  script: cargo +nightly test --features repr128
+  allow_failure: true
+  script:
+    - rustup install nightly
+    - cargo +nightly test --features repr128
