@@ -4,7 +4,6 @@ version = "0.1.0"
 authors = ["Andrei V <andrei@ptaxa.net>"]
 edition = "2018"
 license = "MIT"
-license-file = "LICENSE"
 
 homepage = "https://gitlab.com/PtaxLaine/enum-bits-rs"
 repository = "https://gitlab.com/PtaxLaine/enum-bits-rs"
